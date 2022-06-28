@@ -1,17 +1,30 @@
 import express from "express";
 import dotenv from "dotenv";
 import axios from "axios";
+import cors from "cors";
+
 dotenv.config();
 
 const PORT = process.env.PORT || 8080;
 const app = express();
 const BASE_URL = 'https://api.thegraph.com/subgraphs/name/arturvargas/bloinx-data';
 
+const allowList = ['http://localhost:3000'];
+const corsOptions = {
+  origin (origin: any, callback: any) {
+    if (allowList.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+
 app.get('/', (req, res) => {
   res.send("Bloinx");
 });
 
-app.get('/score', async (req, res) => {
+app.get('/score', cors(corsOptions), async (req, res) => {
   try {
     const result = await axios.post(BASE_URL,{
       query: `
