@@ -25,8 +25,7 @@ app.get("/", (req, res) => {
   res.send("Bloinx");
 });
 
-app.get("/score", async (req, res) => {
-  // cors(corsOptions),
+app.get("/score", cors(corsOptions), async (req, res) => {
   try {
     const { address }: any = req.query;
 
